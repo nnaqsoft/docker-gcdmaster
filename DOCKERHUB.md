@@ -12,8 +12,12 @@ at it.
 - **Burn audio CDs** with CD-Text, ISRC, pre-emphasis, and exact/zero gaps (gapless) in
   disc-at-once (DAO) mode via the `cdrdao` backend.
 - **Burn data CDs, DVDs, Blu-ray**, ISO images, disc copies, multisession, bootable discs.
-- **Rip audio CDs** with CDDB lookup and FLAC/MP3/Ogg/WAV encoders.
+- **Rip audio CDs** with CDDB lookup and FLAC / MP3 (LAME) / Ogg Vorbis / Opus / WavPack /
+  WAVE encoders (all baked in, so they appear in K3b's rip Filetype list).
 - **Blank / format** CD-RW and DVD-RW, verify writes.
+
+K3b copies and burns DVDs but does not transcode video DVDs to files (use HandBrake or
+MakeMKV for that); encrypted commercial DVDs also need `libdvdcss`, which is not bundled.
 
 ## Quick start
 
@@ -51,7 +55,7 @@ group permissions are detected and applied automatically; if that fails, set
 | Variable | Purpose |
 | --- | --- |
 | `USER_ID` / `GROUP_ID` | App UID/GID (default 1000); match your source-file owner. |
-| `ENABLE_CJK_FONT` | Not required: CJK (e.g. Japanese) fonts are baked into the image. |
+| `ENABLE_CJK_FONT` | Not required: the Noto font family (Latin, Cyrillic, Greek, Arabic, Hebrew, Indic, CJK, emoji) and a UTF-8 locale are baked in, so any-script metadata/filenames render. |
 | `DARK_MODE=1` | Dark web UI and Qt theme. |
 | `WEB_FILE_MANAGER=1` | Browse `/storage` from the browser. |
 | `SUP_GROUP_IDS` | Manual device-group fallback. |

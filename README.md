@@ -19,14 +19,21 @@ from any browser on your network.
   are the touches simple burners cannot do.
 - **Burn data CDs, DVDs (single and dual-layer), and Blu-ray**, plus ISO images, disc
   copies, multisession, and bootable discs.
-- **Rip audio CDs** with online (CDDB) track-name lookup and built-in encoders (FLAC, MP3,
-  Ogg, WAV).
+- **Rip audio CDs** with online (CDDB) track-name lookup and built-in encoders: **FLAC,
+  MP3 (LAME), Ogg Vorbis, Opus, WavPack, and WAVE**. The encoder CLIs are baked in, so they
+  show up in K3b's rip "Filetype" list automatically.
 - **Blank and format** rewritable media (CD-RW, DVD-RW), and verify writes.
 
 > Note on CD-Text encoding: per the Red Book spec, CD-Text supports ASCII, ISO-8859-1, and
 > MS-JIS (Japanese). The cdrdao backend can write these, but how reliably they display
 > depends on the player. Many car and hi-fi players show ASCII/Latin-1 cleanly while
 > handling Japanese inconsistently.
+
+> Video DVDs: K3b **copies and burns** DVDs (data and disc-to-disc), but it does **not**
+> transcode a video DVD into a file. Ripping a movie DVD to MP4/MKV is a HandBrake or
+> MakeMKV job, not this image. Reading encrypted commercial DVDs additionally needs
+> `libdvdcss`, which is not in Debian and is not bundled here (you can add it yourself via
+> `libdvd-pkg` on the host, subject to the laws where you live).
 
 ---
 
@@ -152,7 +159,7 @@ base image. The full list is in its documentation; the ones most relevant here:
 | Variable | Purpose |
 | --- | --- |
 | `USER_ID` / `GROUP_ID` | UID/GID the app runs as (default 1000). Match the owner of your mapped source files to avoid permission issues. |
-| `ENABLE_CJK_FONT` | Not required: the WenQuanYi Zen Hei CJK font is baked into this image, so Chinese/Japanese/Korean filenames render out of the box. The base-image variable still exists but you do not need to set it. |
+| `ENABLE_CJK_FONT` | Not required: the Noto font family (Latin, Cyrillic, Greek, Arabic, Hebrew, Indic, CJK, emoji) plus a UTF-8 locale are baked into this image, so metadata and filenames in virtually any script render out of the box. The base-image variable still exists but you do not need to set it. |
 | `DARK_MODE=1` | Dark web UI and dark Qt theme for K3b (via `adwaita-qt`). |
 | `WEB_FILE_MANAGER=1` | Browser-based file manager into the container, handy for inspecting `/storage`. |
 | `WEB_AUDIO=1` | Stream app audio to the browser, to preview tracks. |
@@ -168,6 +175,16 @@ base image. The full list is in its documentation; the ones most relevant here:
 | --- | --- |
 | `/config` | Persistent app config and state. Map it to keep settings across restarts. |
 | `/storage` | Where you mount source files and where rips/images are written. Mounted read-write. |
+
+---
+
+## Languages and fonts
+
+The image bakes in the **Noto** font family (Latin and Latin-extended, Cyrillic, Greek,
+Arabic, Hebrew, Indic, full CJK, and color emoji) plus a generated `en_US.UTF-8` locale.
+CDDB results, ID3/Vorbis tags, and filenames in mixed scripts (for example Japanese,
+Cyrillic, and Arabic in one name) render as real glyphs instead of missing-glyph boxes.
+You do not need `ENABLE_CJK_FONT`; coverage is on by default.
 
 ---
 
