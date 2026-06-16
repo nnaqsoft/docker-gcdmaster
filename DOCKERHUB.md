@@ -56,7 +56,8 @@ and enable web authentication before exposing it more widely.
 
 ## License
 
-Wrapper is MIT. Bundled `cdrdao` / `gcdmaster` / `k3b` are GPL, installed unmodified from
-Debian (source available via Debian). Full details in the repo `LICENSE` and `NOTICE`.
+Wrapper is MIT. `cdrdao` / `gcdmaster` are GPL, built unmodified from upstream source
+(Debian dropped the gcdmaster package, so it is compiled from a pinned commit). `k3b` and
+the extra backends are GPL Debian packages. Full details in the repo `LICENSE` and `NOTICE`.
 
 Full docs and the compose example are in the GitHub repository.

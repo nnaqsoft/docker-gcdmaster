@@ -8,10 +8,12 @@ or jlesage. All trademarks belong to their respective owners.
 The wrapper in this repository (Dockerfile, shell scripts, compose example,
 documentation, CI config) is licensed under the MIT License. See LICENSE.
 
-The published image bundles third-party software, installed UNMODIFIED from the
-Debian 12 (bookworm) archive. Each component keeps its own license. Because the
-binaries are unmodified Debian packages, the corresponding source is available
-from Debian's published sources for the matching package versions.
+The published image bundles third-party software. Most components are installed
+UNMODIFIED from the Debian 12 (bookworm) archive; for those the corresponding
+source is available from Debian's published sources for the matching package
+versions. cdrdao and its gcdmaster GUI are instead built UNMODIFIED from the
+upstream Git repository at a pinned commit (see component 2), because Debian no
+longer packages the gcdmaster GUI. Each component keeps its own license.
 
 
 Bundled components
@@ -22,26 +24,26 @@ Bundled components
    Source  : https://github.com/jlesage/docker-baseimage-gui
    Provides: TigerVNC, noVNC, NGINX, Openbox, and the container init system.
 
-2. cdrdao  (disc-at-once CD recording engine)
+2. cdrdao + gcdmaster  (disc-at-once CD recording engine and its GTK GUI)
    License : GPL-2.0-or-later
-   Source  : https://tracker.debian.org/pkg/cdrdao
+   Built   : unmodified from upstream source at the commit pinned in the
+             Dockerfile (ARG CDRDAO_REF), prefix /usr/local.
+   Source  : https://github.com/cdrdao/cdrdao
    Upstream: https://cdrdao.sourceforge.net/
+   Note    : gcdmaster (the GTK front-end) is no longer packaged by Debian, so
+             it is compiled from this source rather than installed via apt.
 
-3. gcdmaster  (GTK GUI for cdrdao, shipped in the cdrdao source)
-   License : GPL-2.0-or-later
-   Source  : https://tracker.debian.org/pkg/cdrdao
-
-4. cdrkit / wodim  (wodim, optional data-CD backend)
+3. cdrkit / wodim  (wodim, optional data-CD backend)
    License : GPL-2.0-only
    Source  : https://tracker.debian.org/pkg/cdrkit
 
-5. dvd+rw-tools  (optional DVD backend)
+4. dvd+rw-tools  (optional DVD backend)
    License : GPL-2.0-or-later
    Source  : https://tracker.debian.org/pkg/dvd+rw-tools
 
 For the K3b sibling image, additionally:
 
-6. k3b  (KDE CD/DVD burning suite)
+5. k3b  (KDE CD/DVD burning suite, installed from the Debian package)
    License : GPL-2.0-or-later
    Source  : https://tracker.debian.org/pkg/k3b
    Upstream: https://apps.kde.org/k3b/
@@ -50,10 +52,16 @@ For the K3b sibling image, additionally:
 Source availability
 -------------------
 
-To obtain the complete corresponding source for any GPL component above, fetch
-the matching Debian source package, for example:
+For cdrdao and gcdmaster (component 2), the complete corresponding source is the
+upstream Git repository at the commit pinned in the Dockerfile (ARG CDRDAO_REF):
 
-   apt-get source cdrdao
+   git clone https://github.com/cdrdao/cdrdao
+   git checkout <CDRDAO_REF from the Dockerfile>
+
+For the Debian-packaged GPL components (wodim, dvd+rw-tools, k3b), fetch the
+matching Debian source package, for example:
+
+   apt-get source k3b
 
 run against a Debian 12 (bookworm) apt source list, or browse the Debian source
 tracker links listed above. The exact package versions in any given build are

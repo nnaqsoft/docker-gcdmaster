@@ -16,6 +16,14 @@ gcdmaster is its GUI.
 
 A heavier **K3b** sibling image is also available. See [K3b sibling image](#k3b-sibling-image).
 
+> **Why it is built from source:** Debian and Ubuntu no longer ship a `gcdmaster`
+> package. Its old GUI linked against `libgnomeuimm`, which was removed from the
+> archives, so the binary was dropped after Debian 10. Upstream cdrdao has since
+> ported gcdmaster to gtkmm-3, so this image compiles cdrdao + gcdmaster from the
+> upstream source (pinned to a specific commit) and copies just the resulting
+> binaries into a slim runtime image. The burn engine still ends up being plain
+> upstream cdrdao.
+
 ---
 
 ## Quick start
@@ -240,8 +248,10 @@ CD-Text-capable player should display the album and track titles you set.
 - The wrapper in this repo (Dockerfile, scripts, compose, docs, CI) is **MIT**. See
   [`LICENSE`](LICENSE).
 - The base image `jlesage/baseimage-gui` is MIT.
-- `cdrdao`, `gcdmaster`, and `k3b` are **GPL**. They are installed unmodified from the
-  Debian archive, so GPL source availability is satisfied by Debian's published sources.
+- `cdrdao`, `gcdmaster`, and `k3b` are **GPL**. `cdrdao` and `gcdmaster` are built
+  unmodified from the upstream source at the commit pinned in the Dockerfile; `k3b` and
+  the extra backends are installed unmodified from the Debian archive. GPL source
+  availability is satisfied by the upstream repository and Debian's published sources.
 
 Full per-component attribution and source pointers are in [`NOTICE`](NOTICE).
 

@@ -8,4 +8,9 @@
 #
 export HOME=/config
 
-exec /usr/bin/gcdmaster
+# gcdmaster and its GSettings schema are installed under /usr/local (built from
+# source, see Dockerfile). Make sure both are found at runtime.
+export PATH="/usr/local/bin:$PATH"
+export GSETTINGS_SCHEMA_DIR="/usr/local/share/glib-2.0/schemas"
+
+exec /usr/local/bin/gcdmaster
