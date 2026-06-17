@@ -149,6 +149,17 @@ and the startup script logs that udevd could not start, but K3b will not detect 
 > host must have processed the drive). The startup script still brings up the system D-Bus
 > and udisksd, which then read the host's udev data.
 
+### Setuid burn engines
+
+The image ships `wodim` and `cdrdao` **setuid root** (mode `4711`). Both need to lock their
+burn buffer in RAM (mlock) so the write does not underrun; without the elevated privilege a
+burn fails with `Cannot raise RLIMIT_MEMLOCK`. This is exactly what `k3bsetup` configures on
+a desktop install (K3b's Settings > Programs > Permissions tab asks for the same `4711
+root.root`). `cdrdao` is included because CD-Text and gapless disc-at-once audio route
+through it. `growisofs` is intentionally left unprivileged. The image is single-purpose and
+runs privileged anyway; if you prefer not to use setuid, a high `memlock` ulimit is the
+alternative, but setuid is what K3b expects and is the default here.
+
 ---
 
 ## Environment variables

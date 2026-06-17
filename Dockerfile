@@ -39,6 +39,15 @@ RUN dpkg-statoverride --list 2>/dev/null | grep -w messagebus | awk '{print $NF}
 # component that expects a named locale (sorting, some Qt paths) gets a valid one.
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
 
+# Make the burn engines setuid root. wodim and cdrdao must lock their burn buffer in
+# RAM (mlock) so the write does not underrun; as a normal user they fail with "Cannot
+# raise RLIMIT_MEMLOCK" and the burn aborts. This is exactly what k3bsetup configures
+# on a desktop (K3b's Permissions tab asks for 4711 root.root on these two). cdrdao
+# also needs it because CD-Text and gapless disc-at-once audio route through it, which
+# is the primary reason this image exists. growisofs is intentionally left untouched
+# (K3b reports "no change" for it, and it should not be setuid).
+RUN chmod 4711 /usr/bin/wodim /usr/bin/cdrdao
+
 # App start script.
 COPY startapp.sh /startapp.sh
 RUN chmod +x /startapp.sh

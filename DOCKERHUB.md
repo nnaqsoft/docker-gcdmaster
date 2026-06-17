@@ -50,6 +50,10 @@ The sg node is required for DAO/CD-Text/gap control and its number varies per ho
 group permissions are detected and applied automatically; if that fails, set
 `-e SUP_GROUP_IDS=<gid>` (from `ls -ln /dev/sr0`).
 
+The image ships `wodim` and `cdrdao` setuid root (mode `4711`) so they can lock their burn
+buffer in RAM; otherwise burns fail with `Cannot raise RLIMIT_MEMLOCK`. This matches what
+`k3bsetup` configures on a desktop. `growisofs` is left unprivileged.
+
 ## Key environment variables
 
 | Variable | Purpose |
